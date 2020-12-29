@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CartFloat from "./components/CartFloat";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
@@ -21,7 +22,7 @@ import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
 const options = {
-  timeout: 2000,
+  timeout: 1500,
   position: positions.BOTTOM_CENTER,
 };
 
@@ -30,6 +31,7 @@ function App() {
     <Router>
       <Provider template={AlertTemplate} {...options}>
         <Header />
+        <CartFloat />
         <main className="py-3">
           <Container>
             <Route path="/login" component={LoginScreen} />

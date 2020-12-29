@@ -50,21 +50,18 @@ const CartScreen = ({ match, location, history }) => {
           </Message>
         ) : (
           <>
-            <Link to="/" className="btn btn-primary">
-              <i className="fas fa-arrow-left"></i> Continue Shopping
-            </Link>
             <ListGroup variant="flush">
               {cartItems.map((item) => (
                 <ListGroup.Item key={item.product}>
                   <Row>
-                    <Col md={2}>
+                    <Col md={2} id="image-cart">
                       <Image src={item.image} alt={item.name} fluid rounded />
                     </Col>
                     <Col md={3}>
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </Col>
                     <Col md={2}>${item.price}</Col>
-                    <Col md={2}>
+                    <Col md={2} id="cart-qty">
                       <Form.Control
                         as="select"
                         value={item.qty}
@@ -120,6 +117,14 @@ const CartScreen = ({ match, location, history }) => {
                 Proceed To Checkout
               </Button>
             </ListGroup.Item>
+            {cartItems.length > 0 && (
+              <ListGroup.Item>
+                {" "}
+                <Link to="/" className="btn btn-primary btn-block">
+                  <i className="fas fa-arrow-left"></i> Continue Shopping
+                </Link>
+              </ListGroup.Item>
+            )}
           </ListGroup>
         </Card>
       </Col>
