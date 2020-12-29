@@ -18,6 +18,8 @@ import {
   listProductDetails,
   createProductReview,
 } from "../actions/productActions";
+
+import { addToCart } from "../actions/cartActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
 
 const ProductScreen = ({ history, match }) => {
@@ -48,7 +50,10 @@ const ProductScreen = ({ history, match }) => {
   }, [dispatch, match, successReview]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
+    /* history.push(`/cart/${match.params.id}?qty=${qty}`); */
+    dispatch(addToCart(product._id, qty));
+    /* alert("product added to cart"); */
+    <Message>product added to cart</Message>;
   };
 
   const submitHandler = (e) => {
@@ -64,7 +69,7 @@ const ProductScreen = ({ history, match }) => {
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
-        Go Back
+        <i className="fas fa-arrow-left"></i> Go Back
       </Link>
       {loading ? (
         <Loader />

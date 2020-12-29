@@ -13,6 +13,9 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(logout());
   };
+
+  const cart = useSelector((state) => state.cart);
+  const cartLength = cart.cartItems.length;
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -26,8 +29,22 @@ const Header = () => {
             <Nav className="ml-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>
-                  {" "}
-                  <i className="fas fa-shopping-cart"></i> Cart
+                  {cartLength > 0 ? (
+                    <span className="fa-layers fa-fw mx-2">
+                      <i className="fas fa-shopping-cart fa-lg"></i>
+                      <span
+                        className="fas fa-layers-counter fa-layers-top-left"
+                        style={{
+                          background: "tomato",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {cartLength}
+                      </span>
+                    </span>
+                  ) : (
+                    <i className="fas fa-shopping-cart fa-lg"></i>
+                  )}
                 </Nav.Link>
               </LinkContainer>
               {userInfo ? (
