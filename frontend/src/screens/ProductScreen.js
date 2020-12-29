@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAlert } from "react-alert";
 import {
   Row,
   Col,
@@ -28,7 +29,7 @@ const ProductScreen = ({ history, match }) => {
   const [comment, setComment] = useState("");
 
   const dispatch = useDispatch();
-
+  const alert = useAlert();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -53,7 +54,7 @@ const ProductScreen = ({ history, match }) => {
     /* history.push(`/cart/${match.params.id}?qty=${qty}`); */
     dispatch(addToCart(product._id, qty));
     /* alert("product added to cart"); */
-    <Message>product added to cart</Message>;
+    alert.success("product added to cart");
   };
 
   const submitHandler = (e) => {
