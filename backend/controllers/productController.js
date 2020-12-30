@@ -1,4 +1,5 @@
 import Product from "../models/productModel.js";
+import Order from "../models/orderModel.js";
 import asyncHandler from "express-async-handler";
 
 //path to all products
@@ -102,7 +103,23 @@ const createProductReview = asyncHandler(async (req, res) => {
 
   const product = await Product.findById(req.params.id);
 
+  const orders = await Order.find({ user: req.user._id });
+
+  const ordersItems = [].concat.apply(
+    [],
+    orders.map((order) =>
+      order.orderItems.map((item) => item.product.toString())
+    )
+  );
+
   if (product) {
+    const hasBought = ordersItems.includes(product._id.toString());
+
+    if (!hasBought) {
+      res.status(400);
+      throw new Error("You can only review products you have Purchased");
+    }
+
     const alreadyReviewed = product.reviews.find(
       (r) => r.user.toString() === req.user._id.toString()
     );
