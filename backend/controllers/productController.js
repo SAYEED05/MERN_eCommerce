@@ -15,8 +15,28 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {};
 
+  const brandKeyword = req.query.keyword
+    ? {
+        brand: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
+  const categoryKeyword = req.query.keyword
+    ? {
+        category: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+
   const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
+  const products = await Product.find({
+    $or: [{ ...keyword }, { ...brandKeyword }, { ...categoryKeyword }],
+  })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
