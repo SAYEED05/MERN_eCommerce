@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Meta from "../components/Meta";
 
-import { listProducts } from "../actions/productActions";
+import { listProductByCategory } from "../actions/productActions";
 
 /* /api/products/category/${cat} */
 
@@ -16,11 +16,11 @@ const HomeScreen = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const productCategory = useSelector((state) => state.productCategory);
+  const { loading, error, products } = productCategory;
 
   useEffect(() => {
-    dispatch(listProducts(category));
+    dispatch(listProductByCategory(category));
     // eslint-disable-next-line
   }, [dispatch]);
 
@@ -33,7 +33,7 @@ const HomeScreen = ({ match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          {products && (
+          {products ? (
             <>
               <Link to="/" className="btn btn-light">
                 Go Back
@@ -46,6 +46,8 @@ const HomeScreen = ({ match }) => {
                 ))}
               </Row>
             </>
+          ) : (
+            <h2>No products Found</h2>
           )}
         </>
       )}
