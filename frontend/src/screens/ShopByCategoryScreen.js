@@ -27,6 +27,7 @@ const HomeScreen = ({ match }) => {
   return (
     <>
       <Meta />
+      <h1>{`Category : ${category}`}</h1>
       {loading ? (
         <Loader />
       ) : error ? (

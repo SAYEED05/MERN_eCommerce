@@ -54,11 +54,36 @@ export const listProducts = (keyword = "", pageNumber = "") => async (
   }
 };
 
+//LIST PRODUCT BY CATEGORY
+
 export const listProductByCategory = (category) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_BY_CATEGORY_REQUEST });
 
     const { data } = await axios.get(`/api/products/category/${category}`);
+
+    dispatch({
+      type: PRODUCT_LIST_BY_CATEGORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_LIST_BY_CATEGORY_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+//LIST PRODUCT BY BRAND
+
+export const listProductByBrand = (brand) => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_LIST_BY_CATEGORY_REQUEST });
+
+    const { data } = await axios.get(`/api/products/brand/${brand}`);
 
     dispatch({
       type: PRODUCT_LIST_BY_CATEGORY_SUCCESS,

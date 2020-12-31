@@ -7,7 +7,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Meta from "../components/Meta";
 
-import { listProducts } from "../actions/productActions";
+import { listProductByBrand } from "../actions/productActions";
 
 /* /api/products/category/${cat} */
 
@@ -16,17 +16,18 @@ const HomeScreen = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const productCategory = useSelector((state) => state.productCategory);
+  const { loading, error, products } = productCategory;
 
   useEffect(() => {
-    dispatch(listProducts(brand));
+    dispatch(listProductByBrand(brand));
     // eslint-disable-next-line
   }, [dispatch]);
 
   return (
     <>
       <Meta />
+      <h1>{`Products of ${brand}`}</h1>
       {loading ? (
         <Loader />
       ) : error ? (
