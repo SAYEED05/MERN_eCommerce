@@ -55,6 +55,30 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 });
 
+//GET PRODUCT BY CATEGORY
+
+const getProductsByCategory = asyncHandler(async (req, res) => {
+  const product = await Product.find({ category: req.params.category });
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error("Product Not Found");
+  }
+});
+
+//GET PRODUCT BY BRAND
+
+const getProductsByBrand = asyncHandler(async (req, res) => {
+  const product = await Product.find({ brand: req.params.brand });
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error("Product Not Found");
+  }
+});
+
 //DELETE A PRODUCT (ADMIN ONLY)
 
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -186,4 +210,6 @@ export {
   updateProduct,
   createProductReview,
   getTopProducts,
+  getProductsByCategory,
+  getProductsByBrand,
 };

@@ -16,6 +16,8 @@ import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import ShopByCategoryScreen from "./screens/ShopByCategoryScreen";
+import ShopByBrandScreen from "./screens/ShopByBrandScreen";
 import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { positions, Provider } from "react-alert";
@@ -46,6 +48,14 @@ function App() {
             <Route path="/placeorder" component={PlaceOrderScreen} />
             <Route path="/order/:id" component={OrderScreen} />
             <Route path="/admin/orderlist" component={OrderListScreen} />
+            <Route
+              path="/products/category/:category"
+              component={ShopByCategoryScreen}
+            />
+            <Route
+              path="/products/brands/:brand"
+              component={ShopByBrandScreen}
+            />
             <Route
               path="/admin/productlist"
               component={ProductListScreen}
