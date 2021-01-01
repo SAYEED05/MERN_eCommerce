@@ -25,6 +25,7 @@ import {
   PRODUCT_LIST_BY_CATEGORY_REQUEST,
   PRODUCT_LIST_BY_CATEGORY_SUCCESS,
   PRODUCT_LIST_BY_CATEGORY_FAIL,
+  PRODUCTS_ORDER_BY_PRICE,
 } from "../constants/productConstants";
 
 //LIST ALL PRODUCTS
@@ -289,4 +290,28 @@ export const listTopProducts = () => async (dispatch) => {
           : error.message,
     });
   }
+};
+
+export const sortProducts = (products, sort) => (dispatch) => {
+  const items = products.slice();
+  if (sort !== "") {
+    items.sort((a, b) =>
+      sort === "lowestprice"
+        ? a.price > b.price
+          ? 1
+          : -1
+        : a.price < b.price
+        ? 1
+        : -1
+    );
+  } else {
+    items.sort((a, b) => (a.id > b.id ? 1 : -1));
+  }
+  dispatch({
+    type: PRODUCTS_ORDER_BY_PRICE,
+    payload: {
+      products: items,
+      sort: sort,
+    },
+  });
 };

@@ -26,9 +26,13 @@ import {
   PRODUCT_LIST_BY_CATEGORY_REQUEST,
   PRODUCT_LIST_BY_CATEGORY_SUCCESS,
   PRODUCT_LIST_BY_CATEGORY_FAIL,
+  PRODUCTS_ORDER_BY_PRICE,
 } from "../constants/productConstants";
 
-export const productListReducer = (state = { products: [] }, action) => {
+export const productListReducer = (
+  state = { products: [], sort: "" },
+  action
+) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
       return { loading: true, products: [] };
@@ -38,6 +42,13 @@ export const productListReducer = (state = { products: [] }, action) => {
         products: action.payload.products,
         pages: action.payload.pages,
         page: action.payload.page,
+      };
+
+    case PRODUCTS_ORDER_BY_PRICE:
+      return {
+        loading: false,
+        products: action.payload.products,
+        sort: action.payload.sort,
       };
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };

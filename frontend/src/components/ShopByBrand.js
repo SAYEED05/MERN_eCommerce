@@ -2,7 +2,18 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const ShopByBrand = ({ brands }) => {
+const ShopByBrand = ({ products }) => {
+  //GET BRAND
+  var bran = products
+    .map((product) => {
+      return { count: 1, product: product.brand };
+    })
+    .reduce((a, b) => {
+      a[b.product] = (a[b.product] || 0) + b.count;
+      return a;
+    }, {});
+  var brands = Object.keys(bran); /* .map((k) => console.log(k)) */
+
   return (
     <div>
       <h1>Shop By brands</h1>

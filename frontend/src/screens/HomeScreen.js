@@ -10,6 +10,7 @@ import Meta from "../components/Meta";
 import ProductCarousel from "../components/ProductCarousel";
 import ShopByCategory from "../components/ShopByCategory";
 import ShopByBrand from "../components/ShopByBrand";
+import Sort from "../components/Sort";
 import { listProducts } from "../actions/productActions";
 
 const HomeScreen = ({ match }) => {
@@ -25,28 +26,6 @@ const HomeScreen = ({ match }) => {
   useEffect(() => {
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, keyword, pageNumber]);
-
-  //GET CATEGORIES
-  var categ = products
-    .map((product) => {
-      return { count: 1, product: product.category };
-    })
-    .reduce((a, b) => {
-      a[b.product] = (a[b.product] || 0) + b.count;
-      return a;
-    }, {});
-  var keys = Object.keys(categ); /* .map((k) => console.log(k)) */
-
-  //GET BRAND
-  var bran = products
-    .map((product) => {
-      return { count: 1, product: product.brand };
-    })
-    .reduce((a, b) => {
-      a[b.product] = (a[b.product] || 0) + b.count;
-      return a;
-    }, {});
-  var brands = Object.keys(bran); /* .map((k) => console.log(k)) */
 
   return (
     <>
@@ -69,6 +48,13 @@ const HomeScreen = ({ match }) => {
       ) : (
         <>
           <h1>latest products</h1>
+
+          <Row>
+            <Col md={3}>
+              <h6>Sort By:</h6>
+              <Sort products={products} />
+            </Col>
+          </Row>
           <Row>
             {products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -76,8 +62,8 @@ const HomeScreen = ({ match }) => {
               </Col>
             ))}
           </Row>
-          <ShopByCategory keys={keys} />
-          <ShopByBrand brands={brands} />
+          <ShopByCategory products={products} />
+          <ShopByBrand products={products} />
           <Paginate
             pages={pages}
             page={page}

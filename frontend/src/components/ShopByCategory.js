@@ -2,7 +2,18 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const ShopByCategory = ({ keys }) => {
+const ShopByCategory = ({ products }) => {
+  //GET CATEGORIES
+  var categ = products
+    .map((product) => {
+      return { count: 1, product: product.category };
+    })
+    .reduce((a, b) => {
+      a[b.product] = (a[b.product] || 0) + b.count;
+      return a;
+    }, {});
+  var keys = Object.keys(categ); /* .map((k) => console.log(k)) */
+
   return (
     <div>
       <h1>Shop By category</h1>
