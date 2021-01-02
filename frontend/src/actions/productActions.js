@@ -295,6 +295,63 @@ export const listTopProducts = () => async (dispatch) => {
 export const sortProducts = (products, sort) => (dispatch) => {
   const items = products.slice();
   if (sort !== "") {
+    if (sort === "lowestprice") {
+      items.sort((a, b) =>
+        sort === "lowestprice"
+          ? a.price > b.price
+            ? 1
+            : -1
+          : a.price < b.price
+          ? 1
+          : -1
+      );
+    } else if (sort === "highestprice") {
+      items.sort((a, b) =>
+        sort === "highestprice"
+          ? a.price < b.price
+            ? 1
+            : -1
+          : a.price > b.price
+          ? 1
+          : -1
+      );
+    } else if (sort === "toprated") {
+      items.sort((a, b) =>
+        sort === "toprated"
+          ? a.rating < b.rating
+            ? 1
+            : -1
+          : a.rating > b.rating
+          ? 1
+          : -1
+      );
+    } else if (sort === "popularity") {
+      items.sort((a, b) =>
+        sort === "popularity"
+          ? a.numReviews < b.numReviews
+            ? 1
+            : -1
+          : a.numReviews > b.numReviews
+          ? 1
+          : -1
+      );
+    }
+  } else {
+    items.sort((a, b) => (a._id > b._id ? 1 : -1));
+  }
+
+  dispatch({
+    type: PRODUCTS_ORDER_BY_PRICE,
+    payload: {
+      products: items,
+      sort: sort,
+    },
+  });
+};
+
+/* export const sortProducts = (products, sort) => (dispatch) => {
+  const items = products.slice();
+  if (sort !== "") {
     items.sort((a, b) =>
       sort === "lowestprice"
         ? a.price > b.price
@@ -315,3 +372,4 @@ export const sortProducts = (products, sort) => (dispatch) => {
     },
   });
 };
+ */

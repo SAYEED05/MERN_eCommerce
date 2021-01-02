@@ -25,6 +25,7 @@ const Sort = ({ products }) => {
       ) : (
         <select
           className="form-control"
+          style={{ textAlign: "center" }}
           value={sort}
           onChange={(e) => {
             sortingSelect(e);
@@ -33,6 +34,8 @@ const Sort = ({ products }) => {
           <option value="">------</option>
           <option value="lowestprice">Price - Low to high</option>
           <option value="highestprice">Price - High to low</option>
+          <option value="toprated">Top Rated</option>
+          <option value="popularity">Popularity</option>
         </select>
       )}
     </>

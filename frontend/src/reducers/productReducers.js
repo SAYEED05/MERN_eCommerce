@@ -66,6 +66,13 @@ export const productCategoryReducer = (state = { products: [] }, action) => {
         loading: false,
         products: action.payload,
       };
+
+    case PRODUCTS_ORDER_BY_PRICE:
+      return {
+        loading: false,
+        products: action.payload.products,
+        sort: action.payload.sort,
+      };
     case PRODUCT_LIST_BY_CATEGORY_FAIL:
       return { loading: false, error: action.payload };
     default:

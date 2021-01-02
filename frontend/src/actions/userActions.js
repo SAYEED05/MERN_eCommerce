@@ -298,10 +298,10 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("cartItems");
   /*   localStorage.removeItem("shippingAddress"); */
   localStorage.removeItem("paymentMethod");
-  dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: USER_UPDATE_PROFILE_RESET });
   dispatch({ type: ORDER_LIST_MY_RESET });
   dispatch({ type: USER_LIST_RESET });
+  dispatch({ type: USER_LOGOUT });
   document.location.href = "/login"; //REMOVE TO PREVENT RELOAD WHEN REDIRECTING TO LOGIN
 };

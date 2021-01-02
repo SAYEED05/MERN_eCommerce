@@ -6,6 +6,7 @@ import Product from "../components/product";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Meta from "../components/Meta";
+import Sort from "../components/Sort";
 
 import { listProductByCategory } from "../actions/productActions";
 
@@ -21,6 +22,7 @@ const HomeScreen = ({ match }) => {
 
   useEffect(() => {
     dispatch(listProductByCategory(category));
+    window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, [dispatch]);
 
@@ -37,8 +39,14 @@ const HomeScreen = ({ match }) => {
           {products ? (
             <>
               <Link to="/" className="btn btn-light">
-                Go Back
+                <i className="fas fa-arrow-left"></i> Go Back
               </Link>
+              <Row>
+                <Col md={3}>
+                  <h6>Sort By:</h6>
+                  <Sort products={products} />
+                </Col>
+              </Row>
               <Row>
                 {products.map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
