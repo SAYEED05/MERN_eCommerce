@@ -60,6 +60,17 @@ td {
   align-items: center;
 }
 
+.carousel-control-next,
+.carousel-control-prev,
+.carousel-indicators {
+  filter: invert(100%);
+}
+
+.product-carousel-image {
+  width: 100% !important;
+  height: 420px !important;
+}
+
 @media screen and (max-width: 991px) {
   .cart-mobile {
     display: block;

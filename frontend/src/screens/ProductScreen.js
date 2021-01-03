@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Meta from "../components/Meta";
+import ProductImageCarousel from "../components/ProductImageCarousel";
 import {
   listProductDetails,
   createProductReview,
@@ -41,7 +42,6 @@ const ProductScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (successReview) {
-      /* alert("review submitted"); */
       <Message>review submitted</Message>;
       setRating(0);
       setComment("");
@@ -82,7 +82,19 @@ const ProductScreen = ({ history, match }) => {
           <Meta title={product.name} />
           <Row>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              {product.additionalimageone ||
+              product.additionalimagetwo ||
+              product.additionalimagethree ? (
+                <ProductImageCarousel match={match} />
+              ) : (
+                <Image src={product.image} alt={product.name} fluid />
+              )}
+              {/*   <Image
+                src={product.image}
+                alt={product.name}
+                fluid
+                style={{ border: "1px solid black" }}
+              /> */}
             </Col>
             <Col md={3}>
               <ListGroup varient="flush">

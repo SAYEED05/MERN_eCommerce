@@ -14,6 +14,9 @@ const ProductEditScreen = ({ match, history }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
+  const [additionalimageone, setAdditionalimageone] = useState("");
+  const [additionalimagetwo, setAdditionalimagetwo] = useState("");
+  const [additionalimagethree, setAdditionalimagethree] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [countInStock, setCountInStock] = useState(0);
@@ -44,6 +47,9 @@ const ProductEditScreen = ({ match, history }) => {
         setPrice(product.price);
         setDescription(product.description);
         setImage(product.image);
+        setAdditionalimageone(product.additionalimageone);
+        setAdditionalimagetwo(product.additionalimagetwo);
+        setAdditionalimagethree(product.additionalimagethree);
         setBrand(product.brand);
         setCategory(product.category);
         setCountInStock(product.countInStock);
@@ -66,6 +72,75 @@ const ProductEditScreen = ({ match, history }) => {
 
       const { data } = await axios.post("/api/upload", formData, config);
       setImage(data);
+      setAdditionalimageone(data);
+      setAdditionalimagetwo(data);
+      setAdditionalimagethree(data);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
+  };
+
+  const uploadFileHandlerone = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+      setAdditionalimageone(data);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
+  };
+
+  const uploadFileHandlertwo = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+      setAdditionalimagetwo(data);
+      setUploading(false);
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
+  };
+
+  const uploadFileHandlerthree = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post("/api/upload", formData, config);
+      setAdditionalimagethree(data);
       setUploading(false);
     } catch (error) {
       console.log(error);
@@ -81,6 +156,9 @@ const ProductEditScreen = ({ match, history }) => {
         name,
         price,
         image,
+        additionalimageone,
+        additionalimagetwo,
+        additionalimagethree,
         brand,
         category,
         description,
@@ -139,6 +217,57 @@ const ProductEditScreen = ({ match, history }) => {
                 label="Choose File"
                 custom
                 onChange={uploadFileHandler}
+              ></Form.File>
+              {uploading && <Loader />}
+            </Form.Group>
+
+            <Form.Group controlId="Additionalimageone">
+              <Form.Label>Additional Image 1 </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image URL"
+                value={additionalimageone}
+                onChange={(e) => setAdditionalimageone(e.target.value)}
+              ></Form.Control>
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                custom
+                onChange={uploadFileHandlerone}
+              ></Form.File>
+              {uploading && <Loader />}
+            </Form.Group>
+
+            <Form.Group controlId="Additionalimagetwo">
+              <Form.Label>Additional Image 2 </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image URL"
+                value={additionalimagetwo}
+                onChange={(e) => setAdditionalimagetwo(e.target.value)}
+              ></Form.Control>
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                custom
+                onChange={uploadFileHandlertwo}
+              ></Form.File>
+              {uploading && <Loader />}
+            </Form.Group>
+
+            <Form.Group controlId="Additionalimagethree">
+              <Form.Label>Additional Image 3 </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image URL"
+                value={additionalimagethree}
+                onChange={(e) => setAdditionalimagethree(e.target.value)}
+              ></Form.Control>
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                custom
+                onChange={uploadFileHandlerthree}
               ></Form.File>
               {uploading && <Loader />}
             </Form.Group>
