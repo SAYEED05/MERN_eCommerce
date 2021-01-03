@@ -24,6 +24,14 @@ import {
   ORDER_CASH_RECEIVED_SUCCESS,
   ORDER_CASH_RECEIVED_FAIL,
   ORDER_CASH_RECEIVED_RESET,
+  ORDER_PACKED_REQUEST,
+  ORDER_PACKED_SUCCESS,
+  ORDER_PACKED_FAIL,
+  ORDER_PACKED_RESET,
+  ORDER_DISPATCHED_REQUEST,
+  ORDER_DISPATCHED_SUCCESS,
+  ORDER_DISPATCHED_FAIL,
+  ORDER_DISPATCHED_RESET,
 } from "../constants/orderConstants";
 
 //CREATE ORDER
@@ -150,6 +158,60 @@ export const cashReceivedReducer = (state = {}, action) => {
         error: action.payload,
       };
     case ORDER_CASH_RECEIVED_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+//ORDER PACKED REDUCER
+
+export const orderPackedReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_PACKED_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ORDER_PACKED_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case ORDER_PACKED_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_PACKED_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+//ORDER DISPATCHED REDUCER
+
+export const orderDispatchedReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_DISPATCHED_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ORDER_DISPATCHED_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case ORDER_DISPATCHED_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_DISPATCHED_RESET:
       return {};
     default:
       return state;

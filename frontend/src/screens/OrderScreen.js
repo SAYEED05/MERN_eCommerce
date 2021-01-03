@@ -11,11 +11,15 @@ import {
   payOrder,
   deliverOrder,
   cashReceived,
+  orderPacked,
+  orderDispatched,
 } from "../actions/orderActions";
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
   ORDER_CASH_RECEIVED_RESET,
+  ORDER_PACKED_RESET,
+  ORDER_DISPATCHED_RESET,
 } from "../constants/orderConstants";
 
 const OrderScreen = ({ match, history }) => {
@@ -30,6 +34,12 @@ const OrderScreen = ({ match, history }) => {
 
   const orderPay = useSelector((state) => state.orderPay);
   const { success: successPay, loading: loadingPay } = orderPay;
+
+  const orderPack = useSelector((state) => state.orderPack);
+  const { success: successPack, loading: loadingPack } = orderPack;
+
+  const orderDispatch = useSelector((state) => state.orderDispatch);
+  const { success: successDispatch, loading: loadingDispatch } = orderDispatch;
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { success: successDeliver, loading: loadingDeliver } = orderDeliver;
@@ -79,7 +89,9 @@ const OrderScreen = ({ match, history }) => {
     if (
       !order ||
       successPay ||
+      successPack ||
       successDeliver ||
+      successDispatch ||
       successCashReceive ||
       order._id !== orderId
     ) {
@@ -87,6 +99,8 @@ const OrderScreen = ({ match, history }) => {
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch({ type: ORDER_CASH_RECEIVED_RESET });
+      dispatch({ type: ORDER_PACKED_RESET });
+      dispatch({ type: ORDER_DISPATCHED_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -102,6 +116,8 @@ const OrderScreen = ({ match, history }) => {
     successPay,
     successDeliver,
     successCashReceive,
+    successPack,
+    successDispatch,
     orderId,
     history,
     userInfo,
@@ -121,6 +137,18 @@ const OrderScreen = ({ match, history }) => {
   const cashReceivedHandler = () => {
     if (window.confirm("Press ok to mark this cash received")) {
       dispatch(cashReceived(order));
+    }
+  };
+
+  const orderPackedHandler = () => {
+    if (window.confirm("Press ok to mark this packed")) {
+      dispatch(orderPacked(order));
+    }
+  };
+
+  const orderDispatchedHandler = () => {
+    if (window.confirm("Press ok to mark this dispatched")) {
+      dispatch(orderDispatched(order));
     }
   };
 
@@ -156,12 +184,26 @@ const OrderScreen = ({ match, history }) => {
                 {order.shippingAddress.country}
               </p>
 
+              {order.isPacked ? (
+                <Message variant="success">Packed On {order.packedAt}</Message>
+              ) : (
+                <Message variant="danger">Order is Not Packed Yet</Message>
+              )}
+
+              {order.isDispatched ? (
+                <Message variant="success">
+                  Dispatched on {order.dispatchedAt}
+                </Message>
+              ) : (
+                <Message variant="danger">Order is Not Dispatched Yet</Message>
+              )}
+
               {order.isDelivered ? (
                 <Message variant="success">
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant="danger">Not Delivered</Message>
+                <Message variant="danger">Order is Not Delivered Yet</Message>
               )}
             </ListGroup.Item>
 
@@ -256,21 +298,6 @@ const OrderScreen = ({ match, history }) => {
                   )}
                 </ListGroup.Item>
               )}
-              {loadingDeliver && <Loader />}
-              {userInfo &&
-                userInfo.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item>
-                    <Button
-                      type="button"
-                      className="btn btn-block"
-                      onClick={deliverHandler}
-                    >
-                      Mark As Delivered
-                    </Button>
-                  </ListGroup.Item>
-                )}
               {loadingCashReceive && <Loader />}
               {userInfo && userInfo.isAdmin && !order.isPaid && (
                 <ListGroup.Item>
@@ -283,6 +310,56 @@ const OrderScreen = ({ match, history }) => {
                   </Button>
                 </ListGroup.Item>
               )}
+
+              {loadingPack && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                !order.isPacked &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={orderPackedHandler}
+                    >
+                      Mark As Packed
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+              {loadingDispatch && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPacked &&
+                !order.isDispatched &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={orderDispatchedHandler}
+                    >
+                      Mark As Dispatched
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                !order.isDelivered &&
+                order.isPacked &&
+                order.isDispatched && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

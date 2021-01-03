@@ -20,6 +20,12 @@ import {
   ORDER_CASH_RECEIVED_REQUEST,
   ORDER_CASH_RECEIVED_SUCCESS,
   ORDER_CASH_RECEIVED_FAIL,
+  ORDER_PACKED_REQUEST,
+ORDER_PACKED_SUCCESS,
+ORDER_PACKED_FAIL,
+ORDER_DISPATCHED_REQUEST,
+ORDER_DISPATCHED_SUCCESS,
+ORDER_DISPATCHED_FAIL,
 } from "../constants/orderConstants";
 import { CART_CLEAR_ITEMS } from "../constants/cartConstants";
 import axios from "axios";
@@ -211,6 +217,86 @@ export const cashReceived = (order) => async (dispatch, getState) => {
     });
   }
 };
+
+
+// ORDER PACKED ACTION
+export const orderPacked = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_PACKED_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/orders/${order._id}/packed`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: ORDER_PACKED_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_PACKED_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+
+// ORDER DISPATCHED ACTION
+export const orderDispatched = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_DISPATCHED_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/orders/${order._id}/dispatched`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: ORDER_DISPATCHED_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_DISPATCHED_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+
 
 export const listMyorders = () => async (dispatch, getState) => {
   try {

@@ -8,6 +8,8 @@ import {
   getOrders,
   updateOrderToDelivered,
   cashReceived,
+  updateOrderToPacked,
+  updateOrderToDispatched,
 } from "../controllers/orderController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -18,5 +20,7 @@ router.route("/:id/pay").put(protect, updateOrderToPaid);
 router.route("/:id/deliver").put(protect, admin, updateOrderToDelivered);
 
 router.route("/:id/cashreceived").put(protect, admin, cashReceived);
+router.route("/:id/packed").put(protect, admin, updateOrderToPacked);
+router.route("/:id/dispatched").put(protect, admin, updateOrderToDispatched);
 
 export default router;
