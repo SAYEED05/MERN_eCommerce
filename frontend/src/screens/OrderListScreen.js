@@ -39,6 +39,8 @@ const OrderListScreen = ({ history }) => {
               <th>DATE</th>
               <th>TOTAL</th>
               <th>PAID</th>
+              <th>PACKED</th>
+              <th>DISPATCHED</th>
               <th>DELIVERED</th>
               <th></th>
             </tr>
@@ -53,6 +55,20 @@ const OrderListScreen = ({ history }) => {
                 <td>
                   {order.isPaid ? (
                     order.paidAt.substring(0, 10)
+                  ) : (
+                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>
+                  {order.isPacked ? (
+                    order.packedAt.substring(0, 10)
+                  ) : (
+                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                  )}
+                </td>
+                <td>
+                  {order.isDispatched ? (
+                    order.dispatchedAt.substring(0, 10)
                   ) : (
                     <i className="fas fa-times" style={{ color: "red" }}></i>
                   )}
