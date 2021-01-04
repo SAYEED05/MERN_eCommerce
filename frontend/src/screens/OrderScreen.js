@@ -58,11 +58,8 @@ const OrderScreen = ({ match, history }) => {
       return (Math.round(num * 100) / 100).toFixed(2);
     };
 
-    addDecimals(
-      (order.itemsPrice = order.orderItems.reduce(
-        (acc, item) => acc + item.price * item.qty,
-        0
-      ))
+    order.itemsPrice = addDecimals(
+      order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
 
@@ -124,28 +121,34 @@ const OrderScreen = ({ match, history }) => {
     dispatch,
   ]);
 
+  //PAYPAL SUCCESS HANDLER
   const successPaymentHandler = (paymentResult) => {
     //console.log(paymentResult);
     dispatch(payOrder(orderId, paymentResult));
   };
 
+  //MARK AS DELIVERED HANDLER
   const deliverHandler = () => {
     if (window.confirm("Press ok to mark this order as delivered")) {
       dispatch(deliverOrder(order));
     }
   };
+
+  //MARK AS PAID HANDLER
   const cashReceivedHandler = () => {
     if (window.confirm("Press ok to mark this cash received")) {
       dispatch(cashReceived(order));
     }
   };
 
+  //MARK AS PACKED HANDLER
   const orderPackedHandler = () => {
     if (window.confirm("Press ok to mark this packed")) {
       dispatch(orderPacked(order));
     }
   };
 
+  //MARK AS DISPATCHED
   const orderDispatchedHandler = () => {
     if (window.confirm("Press ok to mark this dispatched")) {
       dispatch(orderDispatched(order));
