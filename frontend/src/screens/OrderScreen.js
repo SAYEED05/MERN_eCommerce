@@ -13,6 +13,7 @@ import {
   cashReceived,
   orderPacked,
   orderDispatched,
+  orderCancelled,
 } from "../actions/orderActions";
 import {
   ORDER_PAY_RESET,
@@ -20,6 +21,7 @@ import {
   ORDER_CASH_RECEIVED_RESET,
   ORDER_PACKED_RESET,
   ORDER_DISPATCHED_RESET,
+  ORDER_CANCEL_RESET,
 } from "../constants/orderConstants";
 
 const OrderScreen = ({ match, history }) => {
@@ -40,6 +42,12 @@ const OrderScreen = ({ match, history }) => {
 
   const orderDispatch = useSelector((state) => state.orderDispatch);
   const { success: successDispatch, loading: loadingDispatch } = orderDispatch;
+
+  const orderCancel = useSelector((state) => state.orderCancel);
+  const {
+    success: successOrderCancel,
+    loading: loadingOrderCancel,
+  } = orderCancel;
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { success: successDeliver, loading: loadingDeliver } = orderDeliver;
@@ -69,6 +77,13 @@ const OrderScreen = ({ match, history }) => {
       history.push("/login");
     }
 
+    //REDIRECTS TO HOME PAGE WHEN TRYING TO ACCESS OTHER'S ORDER PAGE IF NOT ADMIN
+    if (order && userInfo) {
+      if (!userInfo.isAdmin && order.user._id !== userInfo._id) {
+        history.push("/");
+      }
+    }
+
     //DYNAMICALLY ADD PAYPAL SCRIPT TO BODY
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
@@ -90,6 +105,7 @@ const OrderScreen = ({ match, history }) => {
       successDeliver ||
       successDispatch ||
       successCashReceive ||
+      successOrderCancel ||
       order._id !== orderId
     ) {
       //DISPATCHING RESETS
@@ -98,6 +114,7 @@ const OrderScreen = ({ match, history }) => {
       dispatch({ type: ORDER_CASH_RECEIVED_RESET });
       dispatch({ type: ORDER_PACKED_RESET });
       dispatch({ type: ORDER_DISPATCHED_RESET });
+      dispatch({ type: ORDER_CANCEL_RESET });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -115,6 +132,7 @@ const OrderScreen = ({ match, history }) => {
     successCashReceive,
     successPack,
     successDispatch,
+    successOrderCancel,
     orderId,
     history,
     userInfo,
@@ -155,6 +173,13 @@ const OrderScreen = ({ match, history }) => {
     }
   };
 
+  //CANCEL ORDER
+  const cancelHandler = () => {
+    if (window.confirm("Are You Sure ?")) {
+      dispatch(orderCancelled(order));
+    }
+  };
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -187,10 +212,18 @@ const OrderScreen = ({ match, history }) => {
                 {order.shippingAddress.country}
               </p>
 
+              {order.isCancelled && (
+                <Message variant="danger">
+                  Order is Cancelled on {order.CancelledAt}
+                </Message>
+              )}
+
               {order.isPacked ? (
                 <Message variant="success">Packed On {order.packedAt}</Message>
               ) : (
-                <Message variant="danger">Order is Not Packed Yet</Message>
+                !order.isCancelled && (
+                  <Message variant="danger">Order is Not Packed Yet</Message>
+                )
               )}
 
               {order.isDispatched ? (
@@ -198,7 +231,11 @@ const OrderScreen = ({ match, history }) => {
                   Dispatched on {order.dispatchedAt}
                 </Message>
               ) : (
-                <Message variant="danger">Order is Not Dispatched Yet</Message>
+                !order.isCancelled && (
+                  <Message variant="danger">
+                    Order is Not Dispatched Yet
+                  </Message>
+                )
               )}
 
               {order.isDelivered ? (
@@ -206,7 +243,9 @@ const OrderScreen = ({ match, history }) => {
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant="danger">Order is Not Delivered Yet</Message>
+                !order.isCancelled && (
+                  <Message variant="danger">Order is Not Delivered Yet</Message>
+                )
               )}
             </ListGroup.Item>
 
@@ -288,7 +327,7 @@ const OrderScreen = ({ match, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+              {!order.isPaid && !order.isCancelled && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
                   {!sdkReady ? (
@@ -302,21 +341,25 @@ const OrderScreen = ({ match, history }) => {
                 </ListGroup.Item>
               )}
               {loadingCashReceive && <Loader />}
-              {userInfo && userInfo.isAdmin && !order.isPaid && (
-                <ListGroup.Item>
-                  <Button
-                    type="button"
-                    className="btn btn-block"
-                    onClick={cashReceivedHandler}
-                  >
-                    Mark As Paid
-                  </Button>
-                </ListGroup.Item>
-              )}
+              {userInfo &&
+                userInfo.isAdmin &&
+                !order.isPaid &&
+                !order.isCancelled && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={cashReceivedHandler}
+                    >
+                      Mark As Paid
+                    </Button>
+                  </ListGroup.Item>
+                )}
 
               {loadingPack && <Loader />}
               {userInfo &&
                 userInfo.isAdmin &&
+                !order.isCancelled &&
                 !order.isPacked &&
                 !order.isDelivered && (
                   <ListGroup.Item>
@@ -334,6 +377,7 @@ const OrderScreen = ({ match, history }) => {
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPacked &&
+                !order.isCancelled &&
                 !order.isDispatched &&
                 !order.isDelivered && (
                   <ListGroup.Item>
@@ -350,6 +394,7 @@ const OrderScreen = ({ match, history }) => {
               {loadingDeliver && <Loader />}
               {userInfo &&
                 userInfo.isAdmin &&
+                !order.isCancelled &&
                 !order.isDelivered &&
                 order.isPacked &&
                 order.isDispatched && (
@@ -360,6 +405,23 @@ const OrderScreen = ({ match, history }) => {
                       onClick={deliverHandler}
                     >
                       Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+              {loadingOrderCancel && <Loader />}
+              {userInfo &&
+                (order.user._id === userInfo._id || userInfo.isAdmin) &&
+                !order.isCancelled &&
+                !order.isDelivered &&
+                !order.isDispatched && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={cancelHandler}
+                    >
+                      Cancel Order
                     </Button>
                   </ListGroup.Item>
                 )}

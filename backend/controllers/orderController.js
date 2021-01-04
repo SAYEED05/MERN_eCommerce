@@ -102,6 +102,22 @@ const updateOrderToDispatched = asyncHandler(async (req, res) => {
   }
 });
 
+//CANCEL ORDER
+const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isCancelled = true;
+    order.CancelledAt = Date.now();
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
 // UPDATE ORDER TO DELIVERED
 
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
@@ -170,4 +186,5 @@ export {
   cashReceived,
   updateOrderToPacked,
   updateOrderToDispatched,
+  cancelOrder,
 };

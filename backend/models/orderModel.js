@@ -91,6 +91,15 @@ const orderSchema = mongoose.Schema(
     dispatchedAt: {
       type: Date,
     },
+    isCancelled: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    CancelledAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

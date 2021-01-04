@@ -33,6 +33,10 @@ import {
   ORDER_DISPATCHED_SUCCESS,
   ORDER_DISPATCHED_FAIL,
   ORDER_DISPATCHED_RESET,
+  ORDER_CANCEL_REQUEST,
+  ORDER_CANCEL_SUCCESS,
+  ORDER_CANCEL_FAIL,
+  ORDER_CANCEL_RESET,
 } from "../constants/orderConstants";
 
 //CREATE ORDER
@@ -189,6 +193,33 @@ export const orderPackedReducer = (state = {}, action) => {
         error: action.payload,
       };
     case ORDER_PACKED_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+//ORDER CANCEL REDUCER
+
+export const orderCancelReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_CANCEL_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ORDER_CANCEL_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+
+    case ORDER_CANCEL_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_CANCEL_RESET:
       return {};
     default:
       return state;
