@@ -1,0 +1,16 @@
+{
+    "short_name": "The Shop",
+    "name": "The Shop",
+    "icons": [
+      {
+        "src": "./images/cartLogo.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any maskable"
+      }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#000000",
+  "background_color": "#ffffff"
+  }
