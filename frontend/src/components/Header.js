@@ -18,7 +18,13 @@ const Header = () => {
   const cartLength = cart.cartItems.length;
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar
+        bg="dark"
+        variant="dark"
+        className="navCustom"
+        expand="lg"
+        collapseOnSelect
+      >
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>THE SHOP</Navbar.Brand>
@@ -31,12 +37,16 @@ const Header = () => {
                 <Nav.Link>
                   {cartLength > 0 ? (
                     <span className="fa-layers fa-fw mx-2">
-                      <i className="fas fa-shopping-cart fa-lg"></i>
+                      <i
+                        style={{ color: "white" }}
+                        className="fas fa-shopping-cart fa-lg"
+                      ></i>
                       <span
                         className="fas fa-layers-counter fa-layers-top-left"
                         style={{
                           background: "tomato",
                           fontSize: "1rem",
+                          color: "white",
                         }}
                       >
                         {cartLength}

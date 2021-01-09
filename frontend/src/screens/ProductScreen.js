@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
-import {
-  Row,
-  Col,
-  Image,
-  Button,
-  ListGroup,
-  Card,
-  Form,
-} from "react-bootstrap";
+import { Row, Col, Image, Button, ListGroup, Form } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
@@ -80,7 +72,13 @@ const ProductScreen = ({ history, match }) => {
       ) : (
         <>
           <Meta title={product.name} />
-          <Row>
+          <Row
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Col md={6}>
               {product.additionalimageone ||
               product.additionalimagetwo ||
@@ -89,18 +87,13 @@ const ProductScreen = ({ history, match }) => {
               ) : (
                 <Image src={product.image} alt={product.name} fluid />
               )}
-              {/*   <Image
-                src={product.image}
-                alt={product.name}
-                fluid
-                style={{ border: "1px solid black" }}
-              /> */}
             </Col>
-            <Col md={3}>
+            <Col md={6}>
               <ListGroup varient="flush">
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
+                <ListGroup.Item>Brand: {product.brand}</ListGroup.Item>
                 <ListGroup.Item>
                   <Rating
                     value={product.rating}
@@ -109,66 +102,82 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
                 <ListGroup.Item>
-                  <strong> Description:</strong>
-                  {product.description}
+                  <Row>
+                    <Col>Status:</Col>
+                    <Col>
+                      {product.countInStock > 0 ? "In stock" : "Out Of Stock"}
+                    </Col>
+                  </Row>
                 </ListGroup.Item>
-              </ListGroup>
-            </Col>
-            <Col md={3}>
-              <Card>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Price:</Col>
-                      <Col>${product.price}</Col>
-                    </Row>
-                  </ListGroup.Item>
 
+                {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <Row>
-                      <Col>Status:</Col>
+                      <Col>Qty</Col>
                       <Col>
-                        {product.countInStock > 0 ? "In stock" : "Out Of Stock"}
+                        <Form.Control
+                          as="select"
+                          value={qty}
+                          onChange={(e) => setQty(e.target.value)}
+                        >
+                          {[...Array(product.countInStock).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </Form.Control>
                       </Col>
                     </Row>
                   </ListGroup.Item>
-
-                  {product.countInStock > 0 && (
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Qty</Col>
-                        <Col>
-                          <Form.Control
-                            as="select"
-                            value={qty}
-                            onChange={(e) => setQty(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  )}
-
-                  <ListGroup.Item>
-                    <Button
-                      className="btn-block"
-                      disabled={product.countInStock === 0}
-                      onClick={addToCartHandler}
-                    >
-                      Add To CART
-                    </Button>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
+                )}
+                <ListGroup.Item>
+                  <Button
+                    className="btn-block"
+                    disabled={product.countInStock === 0}
+                    onClick={addToCartHandler}
+                  >
+                    Add To CART
+                  </Button>
+                </ListGroup.Item>
+              </ListGroup>
             </Col>
           </Row>
+          <ListGroup
+            style={{
+              marginTop: "10px",
+              marginBottom: "10px",
+
+              justifyContent: "center",
+              textAlign: "center",
+              alignItems: "center",
+            }}
+          >
+            <ListGroup.Item style={{ minWidth: "100%" }}>
+              <Row
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  alignItems: "center",
+                }}
+              >
+                <h3>Description</h3>
+              </Row>
+              <Row
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Col md={6}>
+                  <p>{product.description}</p>
+                </Col>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+
           <Row>
             <Col md={6}>
               <h2>Reviews</h2>
@@ -195,6 +204,7 @@ const ProductScreen = ({ history, match }) => {
                           as="select"
                           value={rating}
                           onChange={(e) => setRating(e.target.value)}
+                          required
                         >
                           <option value="">Select...</option>
                           <option value="1">1-Poor</option>
@@ -211,7 +221,7 @@ const ProductScreen = ({ history, match }) => {
                           row="3"
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
-                          required
+                          /*  required */
                         ></Form.Control>
                       </Form.Group>
                       <Button type="submit" variant="primary">
