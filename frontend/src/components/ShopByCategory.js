@@ -24,6 +24,7 @@ const ShopByCategory = ({ products }) => {
               <Link
                 className="btn btn-primary btn-lg"
                 to={`/products/category/${cat}`}
+                style={{ textTransform: "none" }}
               >
                 {cat}
               </Link>

@@ -24,6 +24,7 @@ const ShopByBrand = ({ products }) => {
               <Link
                 className="btn btn-primary btn-lg"
                 to={`/products/brands/${bran}`}
+                style={{ textTransform: "none" }}
               >
                 {bran}
               </Link>
