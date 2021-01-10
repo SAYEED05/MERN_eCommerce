@@ -38,8 +38,18 @@ function App() {
           <Container>
             <Route path="/login" component={LoginScreen} />
             <Route path="/register" component={RegisterScreen} />
-            <Route path="/profile" component={ProfileScreen} />
-            <Route path="/admin/userlist" component={UserListScreen} />
+            <Route path="/profile" component={ProfileScreen} exact />
+            <Route
+              path="/profile/page/:pageNumber"
+              component={ProfileScreen}
+              exact
+            />
+            <Route path="/admin/userlist" component={UserListScreen} exact />
+            <Route
+              path="/admin/userlist/:pageNumber"
+              component={UserListScreen}
+              exact
+            />
             <Route path="/admin/user/:id/edit" component={UserEditScreen} />
             <Route path="/product/:id" component={ProductScreen} />
             <Route path="/cart/:id?" component={CartScreen} />
@@ -47,7 +57,12 @@ function App() {
             <Route path="/payment" component={PaymentScreen} />
             <Route path="/placeorder" component={PlaceOrderScreen} />
             <Route path="/order/:id" component={OrderScreen} />
-            <Route path="/admin/orderlist" component={OrderListScreen} />
+            <Route path="/admin/orderlist" component={OrderListScreen} exact />
+            <Route
+              path="/admin/orderlist/:pageNumber"
+              component={OrderListScreen}
+              exact
+            />
             <Route
               path="/products/category/:category"
               component={ShopByCategoryScreen}

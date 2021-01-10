@@ -98,8 +98,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 //GET ALL USERS (ONLY ADMIN)
 
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find();
-  res.json(users);
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await User.countDocuments({});
+  const users = await User.find()
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.json({ users, page, pages: Math.ceil(count / pageSize) });
 });
 
 //DELETE USER (ONLY ADMIN)

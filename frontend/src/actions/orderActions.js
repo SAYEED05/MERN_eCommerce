@@ -335,7 +335,7 @@ export const orderDispatched = (order) => async (dispatch, getState) => {
   }
 };
 
-export const listMyorders = () => async (dispatch, getState) => {
+export const listMyorders = (pageNumber = "") => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_LIST_MY_REQUEST,
@@ -351,7 +351,10 @@ export const listMyorders = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/orders/myorders`, config);
+    const { data } = await axios.get(
+      `/api/orders/myorders?pageNumber=${pageNumber}`,
+      config
+    );
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,
@@ -368,7 +371,7 @@ export const listMyorders = () => async (dispatch, getState) => {
   }
 };
 
-export const listOrders = () => async (dispatch, getState) => {
+export const listOrders = (pageNumber = "") => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_LIST_REQUEST,
@@ -384,7 +387,10 @@ export const listOrders = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/orders`, config);
+    const { data } = await axios.get(
+      `/api/orders?pageNumber=${pageNumber}`,
+      config
+    );
 
     dispatch({
       type: ORDER_LIST_SUCCESS,

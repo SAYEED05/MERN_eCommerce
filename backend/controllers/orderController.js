@@ -2,6 +2,20 @@ import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 
+//GET ALL ORDERS
+
+const getOrders = asyncHandler(async (req, res) => {
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Order.countDocuments({});
+  const orders = await Order.find({})
+    .populate("user", "id name")
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
+});
+
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
@@ -163,17 +177,14 @@ const cashReceived = asyncHandler(async (req, res) => {
 //GET LOGGED IN USER ORDERS
 
 const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id });
+  const pageSize = 8;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Order.countDocuments({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
-  res.json(orders);
-});
-
-//GET ALL ORDERS
-
-const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name");
-
-  res.json(orders);
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
 });
 
 export {
