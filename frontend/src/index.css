@@ -32,10 +32,6 @@ td {
   text-align: center;
 }
 
-/* .cartqty option {
-
-} */
-
 #cart-float {
   position: fixed;
   top: 0;
@@ -80,10 +76,8 @@ td {
     display: block;
   }
   #cart-float {
-    opacity: 0.5;
-    backface-visibility: hidden;
     padding: 10px;
-    width: 50px;
+    width: 60px;
     height: 40px;
     text-align: center;
     justify-content: center;
